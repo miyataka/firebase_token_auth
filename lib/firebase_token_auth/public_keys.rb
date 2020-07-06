@@ -1,0 +1,32 @@
+module FirebaseTokenAuth
+  class PublicKeys
+    PUBLIC_KEY_URL = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'.freeze
+    attr_accessor :public_keys, :expire_time
+
+    def initialize
+      fetch_publickeys_hash
+    end
+
+    def refresh_publickeys!
+      return unless expired?
+      fetch_publickeys_hash
+    end
+
+    private
+
+      def fetch_publickeys_hash
+        res = Net::HTTP.get_response(URI(PUBLIC_KEY_URL))
+        @public_keys = JSON.parse(json_str).transform_values! { |v| OpenSSL::X509::Certificate.new(v) }
+        @expire_time = cache_control_header_to_expire_time(res['Cache-Control'])
+      end
+
+      def expired?
+        @expire_time.to_i > Time.now.to_i
+      end
+
+      def cache_control_header_to_expire_time(cache_control_header)
+        Time.now.to_i + cache_control_header.match(/max-age=([0-9]*)/)[1].to_i
+      end
+  end
+end
+
