@@ -10,7 +10,7 @@ module FirebaseTokenAuth
   class Client
     CUSTOM_TOKEN_AUD = 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit'.freeze
 
-    def_delegators @configuration, :project_id, :private_key, :client_email, :exp_leeway
+    def_delegators @configuration, :project_id, :private_key, :client_email, :exp_leeway, :configured_for_custom_token?
     def_delegators @pubkey_manager, :public_keys, :refresh_publickeys!, :extract_kid
     def_delegators @validator, :validate
 
