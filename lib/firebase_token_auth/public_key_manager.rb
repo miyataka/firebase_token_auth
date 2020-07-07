@@ -1,5 +1,5 @@
 module FirebaseTokenAuth
-  class PublicKeys
+  class PublicKeyManager
     PUBLIC_KEY_URL = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'.freeze
     attr_accessor :public_keys, :expire_time
 

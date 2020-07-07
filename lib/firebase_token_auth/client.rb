@@ -1,4 +1,4 @@
-require 'public_keys'
+require 'public_key_manager'
 require 'validator'
 
 module FirebaseTokenAuth
@@ -8,8 +8,6 @@ module FirebaseTokenAuth
   IdTokenResult = Struct.new(:uid, :id_token)
 
   class Client
-    attr_accessor :configuration, :validator, :pubkey_manager
-
     CUSTOM_TOKEN_AUD = 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit'.freeze
 
     def_delegators @configuration, :project_id, :private_key, :client_email, :exp_leeway
@@ -18,8 +16,8 @@ module FirebaseTokenAuth
 
     def initialize(configuration)
       @configuration = configuration
-      configuration.prepare
-      @pubkey_manager = PublicKeys.new
+      @configuration.prepare
+      @public_key_manager = PublicKeyManager.new
       @validator = Validator.new
     end
 
