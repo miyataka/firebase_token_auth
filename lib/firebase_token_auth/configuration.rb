@@ -1,9 +1,10 @@
 module FirebaseTokenAuth
   class Configuration
-    attr_accessor :project_id, :json_key_io, :admin_email, :admin_private_key, :private_key, :client_email
+    attr_accessor :project_id, :json_key_io, :admin_email, :admin_private_key, :private_key, :client_email, :exp_leeway
 
     def initialize
       @project_id = nil
+      @exp_leeway = 60 * 60 * 24 * 7
 
       # if you want to create custom_token,
       # you need credentials which a) json_key_io or b) admin_email and admin_private_key
