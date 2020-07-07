@@ -1,5 +1,6 @@
-require 'public_key_manager'
-require 'validator'
+require 'firebase_token_auth/public_key_manager'
+require 'firebase_token_auth/validator'
+require 'forwardable'
 
 module FirebaseTokenAuth
   ALGORITHM = 'RS256'.freeze
@@ -8,6 +9,7 @@ module FirebaseTokenAuth
   IdTokenResult = Struct.new(:uid, :id_token)
 
   class Client
+    extend Forwardable
     CUSTOM_TOKEN_AUD = 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit'.freeze
 
     def_delegators @configuration, :project_id, :private_key, :client_email, :exp_leeway, :configured_for_custom_token?
