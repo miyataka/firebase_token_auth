@@ -1,3 +1,5 @@
+require 'openssl'
+
 module FirebaseTokenAuth
   class Configuration
     attr_accessor :project_id, :json_key_io, :admin_email, :admin_private_key, :private_key, :client_email, :exp_leeway

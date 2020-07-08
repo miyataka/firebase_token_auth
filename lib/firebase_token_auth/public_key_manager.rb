@@ -1,3 +1,6 @@
+require 'openssl'
+require 'net/http'
+
 module FirebaseTokenAuth
   class PublicKeyManager
     PUBLIC_KEY_URL = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'.freeze
@@ -16,7 +19,7 @@ module FirebaseTokenAuth
 
       def fetch_publickeys_hash
         res = Net::HTTP.get_response(URI(PUBLIC_KEY_URL))
-        @public_keys = JSON.parse(json_str).transform_values! { |v| OpenSSL::X509::Certificate.new(v) }
+        @public_keys = JSON.parse(res.body).transform_values! { |v| OpenSSL::X509::Certificate.new(v) }
         @expire_time = cache_control_header_to_expire_time(res['Cache-Control'])
       end
 

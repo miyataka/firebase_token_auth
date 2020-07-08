@@ -1,6 +1,9 @@
+require 'json'
+require 'openssl'
+require 'jwt'
+
 require 'firebase_token_auth/public_key_manager'
 require 'firebase_token_auth/validator'
-require 'forwardable'
 
 module FirebaseTokenAuth
   ALGORITHM = 'RS256'.freeze
@@ -9,12 +12,9 @@ module FirebaseTokenAuth
   IdTokenResult = Struct.new(:uid, :id_token)
 
   class Client
-    extend Forwardable
     CUSTOM_TOKEN_AUD = 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit'.freeze
 
-    def_delegators @configuration, :project_id, :private_key, :client_email, :exp_leeway, :configured_for_custom_token?
-    def_delegators @pubkey_manager, :public_keys, :refresh_publickeys!, :extract_kid
-    def_delegators @validator, :validate
+    attr_accessor :configuration, :public_key_manager, :validator
 
     def initialize(configuration)
       @configuration = configuration
@@ -24,28 +24,28 @@ module FirebaseTokenAuth
     end
 
     def verify_id_token(id_token, options = {})
-      default_options = { verify_iat: true, verify_expiration: true, exp_leeway: exp_leeway }
       raise if id_token.nil? || id_token.empty?
-      public_key_id, decoded_jwt = extract_kid(id_token)
-      refresh_publickeys!
-      validate(project_id, decoded_jwt)
-      jwt = JWT.decode(id_token, public_keys[public_key_id], true, default_options.merge!(options))
-      IdTokenResult.new(uid: jwt[0]['sub'],
-                        id_token: IdToken.new(payload: jwt[0], header: jwt[1]))
+      default_options = { algorithm: ALGORITHM, verify_iat: true, verify_expiration: true, exp_leeway: configuration.exp_leeway }
+      public_key_id, decoded_jwt = validator.extract_kid(id_token)
+      public_key_manager.refresh_publickeys!
+      validator.validate(configuration.project_id, decoded_jwt)
+      default_options = { algorithm: ALGORITHM, verify_iat: true, verify_expiration: true, exp_leeway: configuration.exp_leeway }
+      jwt = JWT.decode(id_token, public_key_manager.public_keys[public_key_id].public_key, true, default_options.merge!(options))
+      IdTokenResult.new(jwt[0]['sub'], IdToken.new(jwt[0], jwt[1]))
     end
 
     def create_custom_token(uid, additional_claims = nil)
       # TODO: implement Error
-      raise unless configured_for_custom_token?
+      raise unless configuration.configured_for_custom_token?
       now_seconds = Time.now.to_i
-      payload = { iss: client_email,
-                  sub: client_email,
+      payload = { iss: configuration.client_email,
+                  sub: configuration.client_email,
                   aud: CUSTOM_TOKEN_AUD,
                   iat: now_seconds,
                   exp: now_seconds + (60 * 60),
                   uid: uid }
       payload.merge!({ claim: additional_claims }) if additional_claims
-      JWT.encode(payload, private_key, ALGORITHM)
+      JWT.encode(payload, configuration.private_key, ALGORITHM)
     end
   end
 end
