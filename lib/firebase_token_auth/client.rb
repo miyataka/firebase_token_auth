@@ -4,6 +4,7 @@ require 'jwt'
 
 require 'firebase_token_auth/public_key_manager'
 require 'firebase_token_auth/validator'
+require 'firebase_token_auth/admin_client'
 
 module FirebaseTokenAuth
   ALGORITHM = 'RS256'.freeze
@@ -48,5 +49,19 @@ module FirebaseTokenAuth
       payload.merge!({ claim: additional_claims }) if additional_claims
       JWT.encode(payload, configuration.private_key, ALGORITHM)
     end
+
+    def user_search_by_email(email)
+      admin_client.get_account_info({ email: [email] })&.users&.map(&:to_h)
+    end
+
+    def user_search_by_uid(uid)
+      admin_client.get_account_info({ local_id: [uid] })&.users&.map(&:to_h)
+    end
+
+    private
+
+      def admin_client
+        @admin_client ||= FirebaseTokenAuth::AdminClient.new(configuration)
+      end
   end
 end
