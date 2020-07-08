@@ -12,6 +12,7 @@ module FirebaseTokenAuth
 
     def refresh_publickeys!
       return unless expired?
+
       fetch_publickeys_hash
     end
 
@@ -32,4 +33,3 @@ module FirebaseTokenAuth
       end
   end
 end
-

@@ -22,4 +22,3 @@ module FirebaseTokenAuth
     end
   end
 end
-

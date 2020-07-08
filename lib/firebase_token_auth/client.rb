@@ -25,7 +25,7 @@ module FirebaseTokenAuth
 
     def verify_id_token(id_token, options = {})
       raise if id_token.nil? || id_token.empty?
-      default_options = { algorithm: ALGORITHM, verify_iat: true, verify_expiration: true, exp_leeway: configuration.exp_leeway }
+
       public_key_id, decoded_jwt = validator.extract_kid(id_token)
       public_key_manager.refresh_publickeys!
       validator.validate(configuration.project_id, decoded_jwt)
@@ -37,6 +37,7 @@ module FirebaseTokenAuth
     def create_custom_token(uid, additional_claims = nil)
       # TODO: implement Error
       raise unless configuration.configured_for_custom_token?
+
       now_seconds = Time.now.to_i
       payload = { iss: configuration.client_email,
                   sub: configuration.client_email,
