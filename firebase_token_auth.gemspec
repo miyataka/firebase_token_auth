@@ -3,16 +3,14 @@ require_relative 'lib/firebase_token_auth/version'
 Gem::Specification.new do |spec|
   spec.name          = 'firebase_token_auth'
   spec.version       = FirebaseTokenAuth::VERSION
-  spec.authors       = ['Takayuki Miyahara']
+  spec.authors       = ['miyataka']
   spec.email         = ['voyager.3taka28@gmail.com']
 
-  spec.summary       = 'firebase_token_auth'
-  spec.description   = 'firebase_token_auth'
+  spec.summary       = 'Firebase Authentication API wrapper. It support custom token auth.'
+  spec.description   = 'Firebase Authentication API wrapper. It support custom token auth.'
   spec.homepage      = 'https://github.com/miyataka/firebase_token_auth'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
-
-  spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
