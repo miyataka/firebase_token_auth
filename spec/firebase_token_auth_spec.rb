@@ -1,18 +1,16 @@
 require 'pry-byebug'
 
 RSpec.describe FirebaseTokenAuth do
-  it "has a version number" do
+  it 'has a version number' do
     expect(FirebaseTokenAuth::VERSION).not_to be nil
   end
 
-  let! (:test_uid) { ENV['TEST_UID'] }
+  let!(:test_uid) { ENV['TEST_UID'] }
 
   context 'FirebaseTokenAuth::Client' do
     before do
       FirebaseTokenAuth.configure do |config|
         config.project_id = ENV['TEST_PROJECT_ID']
-        config.admin_email = ENV['TEST_ADMIN_EMAIL']
-        config.admin_private_key = ENV['TEST_ADMIN_PRIVATE_KEY']
       end
     end
 
@@ -42,7 +40,6 @@ RSpec.describe FirebaseTokenAuth do
     url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken\?key\=#{ENV['TEST_WEB_API_KEY']}"
     data = { token: custom_token, returnSecureToken: true }.to_json
     command_result = `curl -X POST #{url} -H 'Content-Type: application/json' --data \'#{data}\'`
-    # puts command_result
     JSON.parse(command_result)
   end
 end
