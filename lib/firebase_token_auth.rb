@@ -12,7 +12,7 @@ module FirebaseTokenAuth
     def build
       @client = ::FirebaseTokenAuth::Client.new(configuration)
     end
-    alias :new :build
+    alias new build
   end
 
   def self.configuration
