@@ -6,6 +6,7 @@ RSpec.describe FirebaseTokenAuth do
   end
 
   let!(:test_uid) { ENV['TEST_UID'] }
+  let!(:test_user_email) { ENV['TEST_USER_EMAIL'] }
 
   context 'FirebaseTokenAuth::Client' do
     before do
@@ -32,6 +33,24 @@ RSpec.describe FirebaseTokenAuth do
         expect(result.uid).not_to be nil
         expect(result.uid.is_a?(String)).to be true
         expect(result.id_token.payload['sub']).to eq result.uid
+      end
+    end
+
+    context '#user_search_by_email' do
+      it 'smoke test' do
+        client = FirebaseTokenAuth.new
+        result = client.user_search_by_email(test_user_email)
+        expect(result.length).to eq 1
+        expect(result.first[:email]).to eq test_user_email
+      end
+    end
+
+    context '#user_search_by_uid' do
+      it 'smoke test' do
+        client = FirebaseTokenAuth.new
+        result = client.user_search_by_uid(test_uid)
+        expect(result.length).to eq 1
+        expect(result.first[:local_id]).to eq test_uid
       end
     end
   end
