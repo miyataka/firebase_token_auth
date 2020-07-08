@@ -21,9 +21,10 @@ jobs:
         GOOGLE_ACCOUNT_TYPE: ${{ secrets.GOOGLE_ACCOUNT_TYPE }}
         GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
         GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-        GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
         TEST_PROJECT_ID: ${{ secrets.TEST_PROJECT_ID }}
         TEST_UID: ${{ secrets.TEST_UID }}
         TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
         TEST_WEB_API_KEY: ${{ secrets.TEST_WEB_API_KEY }}
-      run: bundle exec rspec
+      run: |
+        export GOOGLE_PRIVATE_KEY=`echo ${{ secrets.GOOGLE_PRIVATE_KEY_BASE64 }} | base64 -d`
+        bundle exec rspec
