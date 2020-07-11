@@ -81,6 +81,7 @@ require 'firebase_token_auth'
 
 FirebaseTokenAuth.configure do |config|
   config.project_id = 'your_project_id'
+  config.json_key_io = "#{Rails.root}/path/to/service_account_credentials.json"
 end
 
 client = FirebaseTokenAuth.new
@@ -95,6 +96,7 @@ require 'firebase_token_auth'
 
 FirebaseTokenAuth.configure do |config|
   config.project_id = 'your_project_id'
+  config.json_key_io = "#{Rails.root}/path/to/service_account_credentials.json"
 end
 
 client = FirebaseTokenAuth.new
