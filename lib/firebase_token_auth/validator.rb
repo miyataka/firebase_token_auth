@@ -7,13 +7,13 @@ module FirebaseTokenAuth
       payload = decoded_jwt[0]
       header = decoded_jwt[1]
       issuer = ISSUER_BASE_URL + project_id
-      raise unless header['kid']
-      raise unless header['alg'] == ALGORITHM
-      raise unless payload['aud'] == project_id
-      raise unless payload['iss'] == issuer
-      raise unless payload['sub'].is_a?(String)
-      raise if payload['sub'].empty?
-      raise if payload['sub'].size > 128
+      raise ValidationError, 'Firebase ID token has no "kid" claim.' unless header['kid']
+      raise ValidationError, "Firebase ID token has incorrect algorithm. Expected \"#{ALGORITHM}\" but got \"#{header['alg']}\"." unless header['alg'] == ALGORITHM
+      raise ValidationError, "Firebase ID token has incorrect \"aud\" (audience) claim. Expected \"#{project_id}\" but got \"#{payload['aud']}\"." unless payload['aud'] == project_id
+      raise ValidationError, "Firebase ID token has \"iss\" (issuer) claim. Expected \"#{issuer}\" but got \"#{payload['iss']}\"." unless payload['iss'] == issuer
+      raise ValidationError, 'Firebase ID token has no "sub" (subject) claim.' unless payload['sub'].is_a?(String)
+      raise ValidationError, 'Firebase ID token has an empty string "sub" (subject) claim.' if payload['sub'].empty?
+      raise ValidationError, 'Firebase ID token has "sub" (subject) claim longer than 128 characters.' if payload['sub'].size > 128
     end
 
     def extract_kid(id_token)

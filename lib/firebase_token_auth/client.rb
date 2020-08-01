@@ -5,6 +5,7 @@ require 'jwt'
 require 'firebase_token_auth/public_key_manager'
 require 'firebase_token_auth/validator'
 require 'firebase_token_auth/admin_client'
+require 'firebase_token_auth/exceptions'
 
 module FirebaseTokenAuth
   ALGORITHM = 'RS256'.freeze
@@ -25,7 +26,7 @@ module FirebaseTokenAuth
     end
 
     def verify_id_token(id_token, options = {})
-      raise if id_token.nil? || id_token.empty?
+      raise ArgumentError, 'Firebase ID token must not null or blank strings.' if id_token.nil? || id_token.empty?
 
       public_key_id, decoded_jwt = validator.extract_kid(id_token)
       public_key_manager.refresh_publickeys!
@@ -36,8 +37,7 @@ module FirebaseTokenAuth
     end
 
     def create_custom_token(uid, additional_claims = nil)
-      # TODO: implement Error
-      raise unless configuration.configured_for_custom_token?
+      raise ConfigurationError, 'To create custom token, You must configure credentials via json or environmental variables.' unless configuration.configured_for_custom_token?
 
       now_seconds = Time.now.to_i
       payload = { iss: configuration.client_email,

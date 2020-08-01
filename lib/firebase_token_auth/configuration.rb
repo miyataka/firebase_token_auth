@@ -24,8 +24,7 @@ module FirebaseTokenAuth
     end
 
     def prepare
-      # TODO: implement error
-      raise unless project_id
+      raise ConfigurationError, 'project_id is required to use firebase_token_auth gem.' unless project_id
       return unless configured_for_custom_token?
 
       @auth = if json_key_io
