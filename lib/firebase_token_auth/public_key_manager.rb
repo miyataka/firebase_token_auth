@@ -1,6 +1,5 @@
 require 'openssl'
 require 'net/http'
-require 'exceptions'
 
 module FirebaseTokenAuth
   class PublicKeyManager

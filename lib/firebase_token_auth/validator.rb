@@ -1,5 +1,3 @@
-require 'exceptions'
-
 module FirebaseTokenAuth
   class Validator
     ISSUER_BASE_URL = 'https://securetoken.google.com/'.freeze

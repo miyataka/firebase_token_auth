@@ -1,6 +1,5 @@
 require 'google/apis/identitytoolkit_v3'
 require 'openssl'
-require 'exceptions'
 
 module FirebaseTokenAuth
   class Configuration
