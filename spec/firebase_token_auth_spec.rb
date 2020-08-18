@@ -53,6 +53,21 @@ RSpec.describe FirebaseTokenAuth do
         expect(result.first[:local_id]).to eq test_uid
       end
     end
+
+    context '#update_existing_account' do
+      it 'smoke test' do
+        client = FirebaseTokenAuth.new
+        prev_email = test_user_email
+        update_params = { display_name: SecureRandom.uuid, email: 'test@example.com' }
+        result = client.update_user(test_uid, update_params)
+        expect(result[:local_id]).to eq test_uid
+        expect(result[:display_name]).to eq update_params[:display_name]
+        expect(result[:email]).to eq update_params[:email]
+        result = client.update_user(test_uid, { email: prev_email })
+        expect(result[:local_id]).to eq test_uid
+        expect(result[:email]).to eq prev_email
+      end
+    end
   end
 
   context 'Exception Handling' do

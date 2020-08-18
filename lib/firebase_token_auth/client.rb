@@ -58,6 +58,10 @@ module FirebaseTokenAuth
       admin_client.get_account_info({ local_id: [uid] })&.users&.map(&:to_h)
     end
 
+    def update_user(uid, attribute_hash)
+      admin_client.update_existing_account(uid, attribute_hash).to_h
+    end
+
     private
 
       def admin_client
