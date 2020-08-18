@@ -4,6 +4,7 @@ FirebaseTokenAuth is an Firebase Auth Client. It supports below.
 - verify id_token method
 - create custom token
 - fetch user info by uid/email
+- update user info
 
 ## Installation
 
@@ -118,6 +119,31 @@ puts result
 #      :provider_id=>"password",
 #      :raw_id=>"<your_user_email>"}],
 #   :valid_since=>1594132097}]
+```
+
+### update user info
+```ruby
+require 'firebase_token_auth'
+
+FirebaseTokenAuth.configure do |config|
+  config.project_id = 'your_project_id'
+  config.json_key_io = "#{Rails.root}/path/to/service_account_credentials.json"
+end
+
+client = FirebaseTokenAuth.new
+# NOTE: parameter_name is snake_case
+update_params = { # ref. https://firebase.google.com/docs/reference/rest/auth#section-update-profile
+  display_name: 'updated_name',
+}
+result = client.update_user(test_uid, update_params)
+puts result
+# => {:display_name=>"updated_name",
+#  :email=>"<your_user_email>",
+#  :email_verified=>false,
+#  :kind=>"identitytoolkit#SetAccountInfoResponse",
+#  :local_id=>"hMPHt8RyDpOsHi1oH5XaVirSYyq2",
+#  :password_hash=>"REDACTED",
+#  :provider_user_info=>[{:display_name=>"updated_name", :federated_id=>"<your_user_email>", :provider_id=>"password"}]}
 ```
 
 ## Contributing
