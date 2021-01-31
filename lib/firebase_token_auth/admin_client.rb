@@ -24,7 +24,7 @@ module FirebaseTokenAuth
 
       def permit_attributes(attr_hash)
         permit_keys = %i[disabled display_name email email_verified password phone_number photo_url multi_factor]
-        attr_hash.filter { |k, _v| permit_keys.include?(k) }
+        attr_hash.select { |k, _v| permit_keys.include?(k) }
       end
   end
 end
