@@ -44,13 +44,19 @@ module FirebaseTokenAuth
         @private_key = OpenSSL::PKey::RSA.new(parsed['private_key'])
         @client_email = parsed['client_email']
       else
-        @private_key = OpenSSL::PKey::RSA.new(StringIO.new(ENV['GOOGLE_PRIVATE_KEY']).read)
+        @private_key = OpenSSL::PKey::RSA.new(unescape(ENV['GOOGLE_PRIVATE_KEY']))
         @client_email = ENV['GOOGLE_CLIENT_EMAIL']
       end
     end
 
     def configured_for_custom_token?
       json_key_io || (ENV['GOOGLE_PRIVATE_KEY'] && ENV['GOOGLE_CLIENT_EMAIL'])
+    end
+
+    def unescape(str)
+      str = str.gsub('\n', "\n")
+      str = str[1..-2] if str.start_with?('"') && str.end_with?('"')
+      str
     end
   end
 end
