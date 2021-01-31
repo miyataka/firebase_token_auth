@@ -44,7 +44,7 @@ module FirebaseTokenAuth
         @private_key = OpenSSL::PKey::RSA.new(parsed['private_key'])
         @client_email = parsed['client_email']
       else
-        @private_key = OpenSSL::PKey::RSA.new(ENV['GOOGLE_PRIVATE_KEY'])
+        @private_key = OpenSSL::PKey::RSA.new(ENV['GOOGLE_PRIVATE_KEY'].gsub("\\n", "\n"))
         @client_email = ENV['GOOGLE_CLIENT_EMAIL']
       end
     end
