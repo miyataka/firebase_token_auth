@@ -54,7 +54,7 @@ FirebaseTokenAuth.configure do |config|
   config.project_id = 'your_project_id'
 end
 
-client = Firebase.build
+client = FirebaseTokenAuth.build
 result = client.verify_id_token(id_token)
 
 puts result.uid
