@@ -32,6 +32,7 @@ module FirebaseTokenAuth
       public_key_manager.refresh_publickeys!
       validator.validate(configuration.project_id, decoded_jwt)
       default_options = { algorithm: ALGORITHM, verify_iat: true, verify_expiration: true, exp_leeway: configuration.exp_leeway }
+      raise ValidationError, 'Public key may have expired.' unless public_key_manager.public_keys.include?(public_key_id)
       jwt = JWT.decode(id_token, public_key_manager.public_keys[public_key_id].public_key, true, default_options.merge!(options))
       IdTokenResult.new(jwt[0]['sub'], IdToken.new(jwt[0], jwt[1]))
     end
