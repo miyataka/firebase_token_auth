@@ -40,6 +40,7 @@ module FirebaseTokenAuth
 
       if json_key_io
         json_io = json_key_io.respond_to?(:read) ? json_key_io : File.open(json_key_io)
+        json_io.rewind if json_key_io.respond_to?(:read) 
         parsed = JSON.parse(json_io.read)
         @private_key = OpenSSL::PKey::RSA.new(parsed['private_key'])
         @client_email = parsed['client_email']
