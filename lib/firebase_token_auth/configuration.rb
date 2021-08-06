@@ -29,6 +29,7 @@ module FirebaseTokenAuth
 
       @auth = if json_key_io
                 io = json_key_io.respond_to?(:read) ? json_key_io : File.open(json_key_io)
+                io.rewind if io.respond_to?(:read) 
                 Google::Auth::ServiceAccountCredentials.make_creds(
                   json_key_io: io,
                   scope: scope
