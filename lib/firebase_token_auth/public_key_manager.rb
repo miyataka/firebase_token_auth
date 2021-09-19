@@ -25,7 +25,7 @@ module FirebaseTokenAuth
       end
 
       def expired?
-        @expire_time.to_i > Time.now.to_i
+        @expire_time.to_i <= Time.now.to_i
       end
 
       def cache_control_header_to_expire_time(cache_control_header)
