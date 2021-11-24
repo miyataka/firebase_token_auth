@@ -20,6 +20,12 @@ module FirebaseTokenAuth
       service.set_account_info(request)
     end
 
+    def delete_existing_account(uid)
+      update_params = { local_id: uid }
+      request = Google::Apis::IdentitytoolkitV3::DeleteAccountRequest.new(**update_params)
+      service.delete_account(request)
+    end
+
     private
 
       def permit_attributes(attr_hash)

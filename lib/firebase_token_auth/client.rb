@@ -63,6 +63,10 @@ module FirebaseTokenAuth
       admin_client.update_existing_account(uid, attribute_hash).to_h
     end
 
+    def delete_user(uid)
+      admin_client.delete_existing_account(uid).to_h
+    end
+
     private
 
       def admin_client
