@@ -55,6 +55,10 @@ module FirebaseTokenAuth
       admin_client.get_account_info({ email: [email] })&.users&.map(&:to_h)
     end
 
+    def signup_user(email, password, attribute_hash)
+      admin_client.create_account(email, password, attribute_hash).to_h
+    end
+
     def user_search_by_uid(uid)
       admin_client.get_account_info({ local_id: [uid] })&.users&.map(&:to_h)
     end
