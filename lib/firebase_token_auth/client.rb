@@ -55,7 +55,7 @@ module FirebaseTokenAuth
       admin_client.get_account_info({ email: [email] })&.users&.map(&:to_h)
     end
 
-    def signup_user(email, password, attribute_hash)
+    def signup_user(email, password, attribute_hash = {})
       admin_client.create_account(email, password, attribute_hash).to_h
     end
 
