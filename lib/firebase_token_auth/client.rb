@@ -51,6 +51,10 @@ module FirebaseTokenAuth
       JWT.encode(payload, configuration.private_key, ALGORITHM)
     end
 
+    def verify_custom_token(custom_token, options = {})
+      admin_client.verify_custom_token(custom_token)
+    end
+
     def user_search_by_email(email)
       admin_client.get_account_info({ email: [email] })&.users&.map(&:to_h)
     end
