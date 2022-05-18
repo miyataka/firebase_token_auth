@@ -20,6 +20,15 @@ module FirebaseTokenAuth
       service.set_account_info(request)
     end
 
+    def verify_custom_token(custom_token)
+      request = Google::Apis::IdentitytoolkitV3::VerifyCustomTokenRequest.new(
+        token: custom_token,
+        return_secure_token: true
+      )
+
+      service.verify_custom_token(request)
+    end
+
     private
 
       def permit_attributes(attr_hash)

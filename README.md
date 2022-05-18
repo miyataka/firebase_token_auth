@@ -91,6 +91,26 @@ puts c_token
 # => "eyJhbGciOXXX.eyJpc3MiOiJmaXJlYmFzXXXX.v7y7LoBXXXXX" # dummy
 ```
 
+### verify custom token
+```ruby
+require 'firebase_token_auth'
+
+FirebaseTokenAuth.configure do |config|
+  config.project_id = 'your_project_id'
+  config.json_key_io = "#{Rails.root}/path/to/service_account_credentials.json"
+end
+
+client = FirebaseTokenAuth.build
+result = client.verify_custom_token(custom_token)
+
+puts result
+# => {:expires_in=>3600,
+#   :id_token=>"<id_token>",
+#   :is_new_user=>"<true/false>",
+#   :kind=>"identitytoolkit#VerifyCustomTokenResponse",
+#   :refresh_token=>"<refresh_token>"}
+```
+
 ### fetch users info from firebase
 ```ruby
 require 'firebase_token_auth'

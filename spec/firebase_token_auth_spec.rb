@@ -18,11 +18,20 @@ RSpec.describe FirebaseTokenAuth do
     context '#create_custom_token' do
       it 'smoke test' do
         client = FirebaseTokenAuth.new
-        c_token = client.create_custom_token(test_uid)
-        res_json = fetch_id_token(c_token)
+        C_TOKEN = client.create_custom_token(test_uid)
+        res_json = fetch_id_token(C_TOKEN)
         expect(res_json['idToken'].is_a?(String)).to be true
         expect(res_json['error']).to be nil
         TEST_ID_TOKEN = res_json['idToken']
+      end
+    end
+
+    context '#verify_custom_token' do
+      it 'smoke test' do
+        client = FirebaseTokenAuth.new
+        res_json = client.verify_custom_token(C_TOKEN)
+        expect(res_json['id_token']).is_a?(String).to be true
+        expect(res_json['refresh_token']).is_a?(String).to be true
       end
     end
 
