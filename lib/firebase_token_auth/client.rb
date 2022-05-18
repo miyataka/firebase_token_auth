@@ -52,7 +52,7 @@ module FirebaseTokenAuth
     end
 
     def verify_custom_token(custom_token, options = {})
-      admin_client.verify_custom_token(custom_token)
+      admin_client.verify_custom_token(custom_token).to_h
     end
 
     def user_search_by_email(email)
