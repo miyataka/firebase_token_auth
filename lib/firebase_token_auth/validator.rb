@@ -14,11 +14,16 @@ module FirebaseTokenAuth
       raise ValidationError, 'Firebase ID token has no "sub" (subject) claim.' unless payload['sub'].is_a?(String)
       raise ValidationError, 'Firebase ID token has an empty string "sub" (subject) claim.' if payload['sub'].empty?
       raise ValidationError, 'Firebase ID token has "sub" (subject) claim longer than 128 characters.' if payload['sub'].size > 128
+      raise ValidationError, 'Firebase ID token has expired.' if expired?(payload['exp'])
     end
 
     def extract_kid(id_token)
       decoded = JWT.decode(id_token, nil, false, algorithm: ALGORITHM)
       [decoded[1]['kid'], decoded]
+    end
+
+    def expired?(exp)
+      exp.to_i <= Time.now.to_i
     end
   end
 end
