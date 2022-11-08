@@ -1,5 +1,6 @@
 require 'google/apis/identitytoolkit_v3'
 require 'openssl'
+require 'resolv-replace'
 
 module FirebaseTokenAuth
   class Configuration
