@@ -20,6 +20,18 @@ module FirebaseTokenAuth
       service.set_account_info(request)
     end
 
+    def create_account(email, password, attributes)
+      params = { email: email, password: password}.merge!(permit_attributes(attributes))
+      request = Google::Apis::IdentitytoolkitV3::SignupNewUserRequest.new(**params)
+      service.signup_new_user(request)
+    end
+
+    def delete_existing_account(uid)
+      update_params = { local_id: uid }
+      request = Google::Apis::IdentitytoolkitV3::DeleteAccountRequest.new(**update_params)
+      service.delete_account(request)
+    end
+
     private
 
       def permit_attributes(attr_hash)
