@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Firebase Authentication API wrapper for serverside. It support custom token auth. Of course it has id_token verify feature.'
   spec.homepage      = 'https://github.com/miyataka/firebase_token_auth'
   spec.license       = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.6.0')
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
