@@ -48,7 +48,7 @@ module FirebaseTokenAuth
                   iat: now_seconds,
                   exp: now_seconds + (60 * 60),
                   uid: uid }
-      payload.merge!({ claim: additional_claims }) if additional_claims
+      payload.merge!({ claims: additional_claims }) if additional_claims
       JWT.encode(payload, configuration.private_key, ALGORITHM)
     end
 
