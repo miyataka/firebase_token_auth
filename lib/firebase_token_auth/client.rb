@@ -1,7 +1,6 @@
 require 'json'
 require 'openssl'
 require 'jwt'
-require 'resolv-replace'
 
 require 'firebase_token_auth/public_key_manager'
 require 'firebase_token_auth/validator'
