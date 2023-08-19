@@ -1,6 +1,7 @@
 require 'json'
 require 'openssl'
 require 'jwt'
+require 'resolv-replace'
 
 require 'firebase_token_auth/public_key_manager'
 require 'firebase_token_auth/validator'
@@ -47,8 +48,12 @@ module FirebaseTokenAuth
                   iat: now_seconds,
                   exp: now_seconds + (60 * 60),
                   uid: uid }
-      payload.merge!({ claim: additional_claims }) if additional_claims
+      payload.merge!({ claims: additional_claims }) if additional_claims
       JWT.encode(payload, configuration.private_key, ALGORITHM)
+    end
+
+    def verify_custom_token(custom_token)
+      admin_client.verify_custom_token(custom_token).to_h
     end
 
     def user_search_by_email(email)
