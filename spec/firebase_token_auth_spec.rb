@@ -30,8 +30,8 @@ RSpec.describe FirebaseTokenAuth do
       it 'smoke test' do
         client = FirebaseTokenAuth.new
         res_json = client.verify_custom_token(C_TOKEN)
-        expect(res_json['id_token']).is_a?(String).to be true
-        expect(res_json['refresh_token']).is_a?(String).to be true
+        expect(res_json[:id_token].is_a?(String)).to be true
+        expect(res_json[:refresh_token].is_a?(String)).to be true
       end
     end
 
