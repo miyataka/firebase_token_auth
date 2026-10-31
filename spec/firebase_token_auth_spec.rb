@@ -1,5 +1,3 @@
-require 'pry-byebug'
-
 RSpec.describe FirebaseTokenAuth do
   it 'has a version number' do
     expect(FirebaseTokenAuth::VERSION).not_to be nil
@@ -7,6 +5,8 @@ RSpec.describe FirebaseTokenAuth do
 
   let!(:test_uid) { ENV['TEST_UID'] }
   let!(:test_user_email) { ENV['TEST_USER_EMAIL'] }
+  let(:custom_token) { FirebaseTokenAuth.new.create_custom_token(test_uid) }
+  let(:test_id_token) { OfflineFirebase.id_token }
 
   context 'FirebaseTokenAuth::Client' do
     before do
@@ -18,18 +18,17 @@ RSpec.describe FirebaseTokenAuth do
     context '#create_custom_token' do
       it 'smoke test' do
         client = FirebaseTokenAuth.new
-        C_TOKEN = client.create_custom_token(test_uid)
-        res_json = fetch_id_token(C_TOKEN)
+        token = client.create_custom_token(test_uid)
+        res_json = fetch_id_token(token)
         expect(res_json['idToken'].is_a?(String)).to be true
         expect(res_json['error']).to be nil
-        TEST_ID_TOKEN = res_json['idToken']
       end
     end
 
     context '#verify_custom_token' do
       it 'smoke test' do
         client = FirebaseTokenAuth.new
-        res_json = client.verify_custom_token(C_TOKEN)
+        res_json = client.verify_custom_token(custom_token)
         expect(res_json[:id_token].is_a?(String)).to be true
         expect(res_json[:refresh_token].is_a?(String)).to be true
       end
@@ -38,7 +37,7 @@ RSpec.describe FirebaseTokenAuth do
     context '#verify_id_token' do
       it 'smoke test' do
         client = FirebaseTokenAuth.new
-        result = client.verify_id_token(TEST_ID_TOKEN)
+        result = client.verify_id_token(test_id_token)
         expect(result.uid).not_to be nil
         expect(result.uid.is_a?(String)).to be true
         expect(result.id_token.payload['sub']).to eq result.uid
@@ -111,7 +110,7 @@ RSpec.describe FirebaseTokenAuth do
   def fetch_id_token(custom_token)
     url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken\?key\=#{ENV['TEST_WEB_API_KEY']}"
     data = { token: custom_token, returnSecureToken: true }.to_json
-    command_result = `curl -X POST #{url} -H 'Content-Type: application/json' --data \'#{data}\'`
-    JSON.parse(command_result)
+    response = Net::HTTP.post(URI(url), data, 'Content-Type' => 'application/json')
+    JSON.parse(response.body)
   end
 end
