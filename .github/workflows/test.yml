@@ -26,6 +26,15 @@ jobs:
       - name: rspec
         run: |
           bundle exec rspec
+        env:
+          TEST_UID: ${{ secrets.TEST_UID }}
+          TEST_PROJECT_ID: ${{ secrets.TEST_PROJECT_ID }}
+          TEST_WEB_API_KEY: ${{ secrets.TEST_WEB_API_KEY }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          GOOGLE_ACCOUNT_TYPE: ${{ secrets.GOOGLE_ACCOUNT_TYPE }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_EMAIL: ${{ secrets.GOOGLE_CLIENT_EMAIL }}
+          GOOGLE_PRIVATE_KEY: ${{ secrets.GOOGLE_PRIVATE_KEY }}
 
       - name: slack notification
         uses: 8398a7/action-slack@v3
