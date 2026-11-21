@@ -8,6 +8,8 @@ FirebaseTokenAuth is an Firebase Auth Client. It supports below.
 
 ## Installation
 
+Version 2.0.0 requires Ruby 3.3 or later. If you still use Ruby 2.6 through 3.2, use version 1.5.1.
+
 Add this line to your application's Gemfile:
 
 ```ruby
